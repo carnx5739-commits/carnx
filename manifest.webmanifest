@@ -1,0 +1,27 @@
+{
+  "name": "carnx – השוואת רכבים",
+  "short_name": "carnx",
+  "description": "השוואת רכבים בישראל: עלות בעלות אמיתית, ציון התאמה אישי והמלצה, משנת 1990 ועד היום.",
+  "id": "/",
+  "start_url": "/?source=pwa",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "lang": "he",
+  "dir": "rtl",
+  "background_color": "#f2f3f0",
+  "theme_color": "#0e6b5b",
+  "categories": ["auto", "utilities", "lifestyle"],
+  "icons": [
+    {"src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
+    {"src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"},
+    {"src": "icons/maskable-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable"},
+    {"src": "icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
+  ],
+  "screenshots": [
+    {"src": "screenshots/1-home.png", "sizes": "1080x1920", "type": "image/png", "form_factor": "narrow", "label": "דף הבית"},
+    {"src": "screenshots/2-categories.png", "sizes": "1080x1920", "type": "image/png", "form_factor": "narrow", "label": "קטגוריות ודגמים פופולריים"},
+    {"src": "screenshots/3-verdict.png", "sizes": "1080x1920", "type": "image/png", "form_factor": "narrow", "label": "המלצה אישית"},
+    {"src": "screenshots/4-costs.png", "sizes": "1080x1920", "type": "image/png", "form_factor": "narrow", "label": "עלות בעלות ל-5 שנים"}
+  ]
+}
