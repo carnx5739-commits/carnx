@@ -337,6 +337,7 @@ header.top .hbtns{display:flex;gap:8px;flex-wrap:wrap}
 .apppromo p{margin:0;opacity:.92;line-height:1.5;font-size:.95rem}
 .apppromo .ap-b{display:flex;gap:10px;flex-wrap:wrap}
 .apppromo .ap-b a,.apppromo .ap-b button{display:inline-flex;align-items:center;gap:8px;padding:11px 18px;border-radius:10px;background:#fff;color:#0b4f43;font-weight:700;border:0;text-decoration:none;font-size:.98rem;cursor:pointer}
+.apppromo .ap-b .ap-soon{display:inline-flex;align-items:center;gap:6px;padding:11px 16px;border-radius:10px;border:1px dashed rgba(255,255,255,.55);color:#fff;font-weight:600;font-size:.92rem;opacity:.9;cursor:default}.apppromo .ap-b .ap-soon small{background:#ffd166;color:#3b2c00;border-radius:99px;padding:1px 8px;font-size:.72rem;font-weight:800}.apppromo .ap-b .ap-soon[hidden]{display:none!important}
 .apppromo .ap-b a[hidden],.apppromo .ap-b button[hidden]{display:none!important}
 .apppromo .ap-hint{flex-basis:100%;font-size:.88rem;background:rgba(255,255,255,.14);border-radius:10px;padding:10px 14px;margin:0}
 .hb-fab{position:fixed;left:max(14px,env(safe-area-inset-left,0px));bottom:max(14px,env(safe-area-inset-bottom,0px));z-index:60;display:inline-flex;align-items:center;gap:8px;padding:11px 18px;border-radius:99px;background:#fff;color:#0b4f43;border:1.5px solid #0e6b5b;font-weight:700;box-shadow:0 6px 18px rgba(0,0,0,.25);cursor:pointer}
@@ -12794,7 +12795,7 @@ function renderHome(){
 var APP_LINKS={play:'',ios:''};
 function appPromoHtml(){
  return '<div class="apppromo" id="apppromo" hidden>'+'<svg class="ap-ico" viewBox="0 0 1024 1024" aria-hidden="true"><defs><linearGradient id="lg2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1f8a72"/><stop offset="1" stop-color="#083d33"/></linearGradient></defs><rect width="1024" height="1024" rx="210" fill="url(#lg2)" stroke="rgba(255,255,255,.35)" stroke-width="22"/><g transform="translate(30 50)"><g fill="none" stroke="#fff" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"><path d="M170 560 L230 440 Q250 410 290 410 H460 Q500 410 530 440 L585 495 H700 Q760 500 790 545 L810 640 H170 Z" opacity=".5" transform="translate(-60 -70)"/><path d="M230 700 L290 580 Q310 550 350 550 H600 Q640 550 670 580 L725 635 H840 Q900 640 930 685 L950 780 H230 Z" transform="translate(-100 -30)"/></g><g fill="#fff"><circle cx="355" cy="750" r="52"/><circle cx="745" cy="750" r="52"/></g><g fill="#1f8a72"><circle cx="355" cy="750" r="20"/><circle cx="745" cy="750" r="20"/></g><g fill="#ffd166"><rect x="300" y="215" width="70" height="150" rx="20"/><rect x="400" y="165" width="70" height="200" rx="20"/><rect x="500" y="250" width="70" height="115" rx="20"/></g></g></svg>'+'<div class="ap-t"><h3>אהבתם את carnx? אנחנו גם באפליקציה</h3><p>פותחים ישר מהמסך הראשי של הטלפון, בלי לחפש בדפדפן, ושומרים את ההשוואות לרגע שצריך.</p></div>'+
- '<div class="ap-b"><a id="ap-play" href="#" target="_blank" rel="noopener" hidden>להורדה ב-Google Play</a><a id="ap-ios" href="#" target="_blank" rel="noopener" hidden>להורדה ב-App Store</a><button id="ap-install" type="button" hidden>התקנה למסך הבית</button></div>'+
+ '<div class="ap-b"><a id="ap-play" href="#" target="_blank" rel="noopener" hidden>להורדה ב-Google Play</a><a id="ap-ios" href="#" target="_blank" rel="noopener" hidden>להורדה ב-App Store</a><button id="ap-install" type="button" hidden>התקנה למסך הבית</button><span class="ap-soon" id="ap-play-soon" hidden>Google Play <small>בקרוב</small></span><span class="ap-soon" id="ap-ios-soon" hidden>App Store <small>בקרוב</small></span></div>'+
  '<p class="ap-hint" id="ap-hint" hidden></p></div>';
 }
 var deferredInstall=null;
@@ -12808,7 +12809,9 @@ function syncAppPromo(){
  if(APP_LINKS.ios){st.href=APP_LINKS.ios;st.hidden=false}
  var canInstall=!!deferredInstall||(ios&&location.protocol.indexOf('http')===0);
  ins.hidden=!canInstall;
- box.hidden=!(APP_LINKS.play||APP_LINKS.ios||canInstall);
+ /* "coming soon" chips: disappear automatically once the store link is set in APP_LINKS */
+ document.getElementById('ap-play-soon').hidden=!!APP_LINKS.play;document.getElementById('ap-ios-soon').hidden=!!APP_LINKS.ios;
+ box.hidden=false;
 }
 window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();deferredInstall=e;syncAppPromo()});
 window.addEventListener('appinstalled',function(){deferredInstall=null;syncAppPromo()});
