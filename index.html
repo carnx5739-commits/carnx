@@ -315,6 +315,38 @@ details.info p{margin:6px 0 0}
 .hero-info .hinfo{margin:0;padding:0;list-style:none;display:grid;gap:7px;font-size:.92rem;line-height:1.45;color:#fff}
 .hero-info .hinfo li{padding-inline-start:16px;position:relative}
 .hero-info .hinfo li:before{content:"";position:absolute;inset-inline-start:0;top:.55em;width:7px;height:7px;border-radius:50%;background:#f2c14e}
+.hero-brand{display:flex;align-items:center;gap:12px;margin:0 0 16px;direction:ltr;justify-content:flex-end}
+.hero-brand .hl-ico{width:60px;height:60px;flex:none;filter:drop-shadow(0 4px 10px rgba(0,0,0,.3))}
+.hero-brand b{font-family:'Secular One','Assistant',sans-serif;font-size:2.1rem;letter-spacing:.02em;line-height:1;color:#fff}
+.hero-brand b i{font-style:normal;color:#ffd166}
+.hero-brand small{font-size:.82rem;opacity:.8;letter-spacing:.05em;padding-inline-start:12px;border-inline-start:1px solid rgba(255,255,255,.35)}
+.hero h2 em{font-style:normal;display:block;color:#ffd166;margin-top:6px}
+.hero-road{grid-column:1/-1;position:relative;height:84px;margin:8px -36px -36px;direction:ltr;overflow:hidden;color:#fff;background:linear-gradient(180deg,rgba(0,0,0,0) 0,rgba(0,0,0,.18) 100%)}
+.hero-road .rc-hills{position:absolute;inset:0 0 22px 0;background:repeating-linear-gradient(90deg,transparent 0 120px,rgba(255,255,255,.07) 120px 121px);opacity:.7}
+.hero-road .rc-ground{position:absolute;left:0;right:0;bottom:0;height:26px;background:rgba(0,0,0,.32)}
+.hero-road .rc-lane{position:absolute;left:0;right:0;bottom:11px;height:4px;background:repeating-linear-gradient(90deg,rgba(255,255,255,.75) 0 34px,transparent 34px 74px);background-size:74px 4px}
+.hero-road .rc-car{position:absolute;bottom:20px;width:128px;left:110%}
+.hero-road .rc-car .rc-svg{display:block;width:100%;height:auto;transform:scaleX(-1)}
+.hero-road .rc-car.c2{width:96px;bottom:34px;color:rgba(255,255,255,.55)}
+.hero-road .rc-car.c3{width:78px;bottom:44px;color:#ffd166}
+.hero-road .rc-w{transform-box:fill-box;transform-origin:center}
+@media(prefers-reduced-motion:no-preference){
+@keyframes rcDrive{from{left:108%}to{left:-180px}}
+@keyframes rcBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
+@keyframes rcLane{to{background-position:-74px 0}}
+@keyframes rcSpin{to{transform:rotate(-360deg)}}
+.hero-road .rc-car{animation:rcDrive 11s linear infinite}
+.hero-road .rc-car.c2{animation-duration:15s;animation-delay:-5s}
+.hero-road .rc-car.c3{animation-duration:19s;animation-delay:-11s}
+.hero-road .rc-car .rc-svg{animation:rcBounce .5s ease-in-out infinite}
+.hero-road .rc-lane{animation:rcLane .9s linear infinite}
+.hero-road .rc-w{animation:rcSpin .55s linear infinite}
+.hero h2{animation:heroIn .7s ease both}
+.hero-brand{animation:heroIn .5s ease both}
+@keyframes heroIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+}
+@media(prefers-reduced-motion:reduce){.hero-road .rc-car{left:38%}.hero-road .rc-car.c2{left:12%}.hero-road .rc-car.c3{left:68%}}
+@media(max-width:760px){.hero-road{margin:4px -22px -22px;height:72px}.hero-road .rc-car{width:104px}.hero-brand{justify-content:flex-start}}
 .hero .eyebrow{font-size:.85rem;letter-spacing:.06em;opacity:.85;margin:0 0 8px}
 .hero h2{font-family:'Secular One','Assistant',sans-serif;font-size:clamp(2rem,5vw,3.4rem);line-height:1.1;margin:0 0 14px;text-wrap:balance;color:#fff}
 .hero p{font-size:1.08rem;line-height:1.6;margin:0 0 22px;max-width:46ch;opacity:.95}
@@ -12656,10 +12688,10 @@ function renderHome(){
  SL=SL.length?SL:VSL.map(function(v){return [v[0]+'|'+v[1],v[1]]});
  var hero=(HAS_PHOTO?SL.map(function(x,i){return '<img class="sl'+(SCENE[x[0]]?' sc':'')+(i===0?' on':'')+'" src="'+HERO[x[0]]+'" alt="'+x[1]+'">'}).join(''):VSL.map(function(v,i){return '<div class="slv sl'+(i===0?' on':'')+'" style="--carbody:'+v[2]+'" role="img" aria-label="איור רכב">'+art(v[0],v[1],1)+'</div>'}).join(''))+'<span class="dots" aria-hidden="true">'+SL.map(function(x,i){return '<i'+(i===0?' class="on"':'')+'></i>'}).join('')+'</span>';
  $('#home').innerHTML=
- '<div class="hero"><div><p class="eyebrow">carnx · השוואת רכבים</p><h2>מתלבטים בין כמה רכבים? נבחר ביחד.</h2>'+
+ '<div class="hero"><div><div class="hero-brand" dir="ltr"><svg class="hl-ico" viewBox="0 0 1024 1024" aria-hidden="true"><defs><linearGradient id="lg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1f8a72"/><stop offset="1" stop-color="#083d33"/></linearGradient></defs><rect width="1024" height="1024" rx="210" fill="url(#lg1)" stroke="rgba(255,255,255,.35)" stroke-width="22"/><g transform="translate(30 50)"><g fill="none" stroke="#fff" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"><path d="M170 560 L230 440 Q250 410 290 410 H460 Q500 410 530 440 L585 495 H700 Q760 500 790 545 L810 640 H170 Z" opacity=".5" transform="translate(-60 -70)"/><path d="M230 700 L290 580 Q310 550 350 550 H600 Q640 550 670 580 L725 635 H840 Q900 640 930 685 L950 780 H230 Z" transform="translate(-100 -30)"/></g><g fill="#fff"><circle cx="355" cy="750" r="52"/><circle cx="745" cy="750" r="52"/></g><g fill="#1f8a72"><circle cx="355" cy="750" r="20"/><circle cx="745" cy="750" r="20"/></g><g fill="#ffd166"><rect x="300" y="215" width="70" height="150" rx="20"/><rect x="400" y="165" width="70" height="200" rx="20"/><rect x="500" y="250" width="70" height="115" rx="20"/></g></g></svg><b>carn<i>x</i></b><small>השוואת רכבים</small></div><h2>רוצים לקנות רכב ולא יודעים באיזה לבחור?<em>הגעתם למקום הנכון.</em></h2>'+
  '<p>בוחרים דגמים משנת 1990 ועד היום, מזינים איך נוהגים, ומקבלים עלות בעלות אמיתית, ביצועים, מרחב ובטיחות ליד התמונות, ובסוף המלצה אחת שמותאמת אליכם.</p>'+
  '<div class="cta"><button class="go" id="h-start" type="button">מתחילים להשוות</button><button class="alt" id="h-demo" type="button">ראו דוגמה</button></div></div>'+
- '<div class="hero-info">'+heroInfoHtml()+'</div></div>'+
+ '<div class="hero-info">'+heroInfoHtml()+'</div><div class="hero-road" aria-hidden="true"><div class="rc-hills"></div><div class="rc-ground"></div><div class="rc-lane"></div><div class="rc-car c3"><svg class="rc-svg" viewBox="210 530 760 290" aria-hidden="true"><path d="M230 700 L290 580 Q310 550 350 550 H600 Q640 550 670 580 L725 635 H840 Q900 640 930 685 L950 780 H230 Z" fill="none" stroke="currentColor" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"/><g class="rc-w"><circle cx="355" cy="750" r="52" fill="currentColor"/><path d="M355 722V778M327 750H383" stroke="#0e6b5b" stroke-width="12" stroke-linecap="round"/></g><g class="rc-w"><circle cx="745" cy="750" r="52" fill="currentColor"/><path d="M745 722V778M717 750H773" stroke="#0e6b5b" stroke-width="12" stroke-linecap="round"/></g></svg></div><div class="rc-car c2"><svg class="rc-svg" viewBox="210 530 760 290" aria-hidden="true"><path d="M230 700 L290 580 Q310 550 350 550 H600 Q640 550 670 580 L725 635 H840 Q900 640 930 685 L950 780 H230 Z" fill="none" stroke="currentColor" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"/><g class="rc-w"><circle cx="355" cy="750" r="52" fill="currentColor"/><path d="M355 722V778M327 750H383" stroke="#0e6b5b" stroke-width="12" stroke-linecap="round"/></g><g class="rc-w"><circle cx="745" cy="750" r="52" fill="currentColor"/><path d="M745 722V778M717 750H773" stroke="#0e6b5b" stroke-width="12" stroke-linecap="round"/></g></svg></div><div class="rc-car"><svg class="rc-svg" viewBox="210 530 760 290" aria-hidden="true"><path d="M230 700 L290 580 Q310 550 350 550 H600 Q640 550 670 580 L725 635 H840 Q900 640 930 685 L950 780 H230 Z" fill="none" stroke="currentColor" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"/><g class="rc-w"><circle cx="355" cy="750" r="52" fill="currentColor"/><path d="M355 722V778M327 750H383" stroke="#0e6b5b" stroke-width="12" stroke-linecap="round"/></g><g class="rc-w"><circle cx="745" cy="750" r="52" fill="currentColor"/><path d="M745 722V778M717 750H773" stroke="#0e6b5b" stroke-width="12" stroke-linecap="round"/></g></svg></div></div></div>'+
  factsHtml()+'<div class="stats"><div><strong>'+Object.keys(BR).length+'</strong><span>יצרנים</span></div><div><strong>'+Object.keys(models).length.toLocaleString('he-IL')+'</strong><span>דגמים</span></div><div><strong>'+ROWS.length.toLocaleString('he-IL')+'</strong><span>דורות וגרסאות</span></div><div><strong dir="ltr">1990–2026</strong><span>טווח שנים</span></div></div>'+
  '<div class="hgrid"><div class="hmain">'+
  '<h3>בחרו קטגוריה</h3><p class="sub">לחיצה על קטגוריה מובילה ישר לבחירת דגמים.</p>'+
