@@ -12873,7 +12873,9 @@ setInterval(function(){var e=document.getElementById('fact-t');if(!e||!document.
  try{
   if(!window.claude||!claude.use){
    if(location.protocol.indexOf('http')===0&&window.fetch){
-    fetch('news.json?'+Math.floor(Date.now()/600000),{cache:'no-cache'}).then(function(r){return r.ok?r.json():null}).then(apply).catch(function(){});
+    var q=Math.floor(Date.now()/600000),NEWS_URL='https://raw.githubusercontent.com/carnx5739-commits/carnx/news/news.json?'+q;
+    /* news lives on a separate git branch so a daily update does not trigger a (credit-metered) Netlify deploy; bundled news.json is the fallback */
+    fetch(NEWS_URL).then(function(r){return r.ok?r.json():null}).then(function(d){if(d&&d.items&&d.items.length)return d;throw 0}).catch(function(){return fetch('news.json?'+q,{cache:'no-cache'}).then(function(r){return r.ok?r.json():null})}).then(apply).catch(function(){});
    }
    return;
   }
