@@ -12555,9 +12555,9 @@ function updateNav(){
  if(S.step<5)nx.textContent='הבא: '+STEPS[S.step];
 }
 var DRV_CAR='<svg class="rc-svg" viewBox="210 530 760 290" aria-hidden="true"><path d="M230 700 L290 580 Q310 550 350 550 H600 Q640 550 670 580 L725 635 H840 Q900 640 930 685 L950 780 H230 Z" fill="none" stroke="currentColor" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"/><circle cx="936" cy="728" r="14" fill="#ffd166" stroke="none"/><path d="M958 722 L1060 684 L1060 776 L958 744Z" fill="#ffd166" fill-opacity=".28" stroke="none" class="rc-beam"/><rect x="226" y="676" width="16" height="30" rx="6" fill="#ff6b6b" stroke="none"/><g class="rc-w"><circle cx="355" cy="750" r="52" fill="currentColor"/><path d="M355 722V778M327 750H383" stroke="#0e6b5b" stroke-width="12" stroke-linecap="round"/></g><g class="rc-w"><circle cx="745" cy="750" r="52" fill="currentColor"/><path d="M745 722V778M717 750H773" stroke="#0e6b5b" stroke-width="12" stroke-linecap="round"/></g></svg>';
-function driveGo(fn){
+function driveGo(fn,txt){
  var o=document.createElement('div');o.className='drv';o.setAttribute('aria-hidden','true');
- o.innerHTML='<div class="drv-t">מכינים לכם את <i>ההשוואה</i>…</div><div class="drv-road"></div><div class="drv-lane"></div><div class="drv-car">'+DRV_CAR+'</div>';
+ o.innerHTML='<div class="drv-t">'+(txt||'מכינים לכם את <i>ההשוואה</i>…')+'</div><div class="drv-road"></div><div class="drv-lane"></div><div class="drv-car">'+DRV_CAR+'</div>';
  document.body.appendChild(o);
  requestAnimationFrame(function(){requestAnimationFrame(function(){o.classList.add('on')})});
  setTimeout(function(){try{fn()}catch(e){}},680);
@@ -12568,7 +12568,7 @@ var drvBusy=false;
 function showStep(n){
  var t=Math.max(1,Math.min(5,n));
  var calm=window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').matches;
- if(t===4&&S.step!==4&&!drvBusy&&!calm){drvBusy=true;driveGo(function(){doShowStep(t)});setTimeout(function(){drvBusy=false},1400);return}
+ if((t===4||t===5)&&S.step!==t&&!drvBusy&&!calm){drvBusy=true;driveGo(function(){doShowStep(t)},t===5?'והנה <i>ההמלצה</i> שלכם…':null);setTimeout(function(){drvBusy=false},1400);return}
  doShowStep(n);
 }
 function doShowStep(n){
@@ -12784,6 +12784,19 @@ setInterval(function(){var e=document.getElementById('fact-t');if(!e||!document.
    db.doc('news/current').onSnapshot(function(sn){if(sn.exists)apply(sn.data())},function(){});
   }).catch(function(){});
  }catch(e){}
+})();
+/* animated counters in the home stats */
+(function(){
+ if(!window.IntersectionObserver||(window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').matches))return;
+ var els=[].slice.call(document.querySelectorAll('.stats strong')).filter(function(e){return /^[0-9,.\u066b]+$/.test(e.textContent.trim())});
+ if(!els.length)return;
+ var io=new IntersectionObserver(function(es){es.forEach(function(en){
+  if(!en.isIntersecting)return;io.unobserve(en.target);
+  var el=en.target,txt=el.textContent,to=+txt.replace(/[^0-9]/g,''),t0=null;
+  var step=function(ts){if(t0===null)t0=ts;var p=Math.min(1,(ts-t0)/1100),e=1-Math.pow(1-p,3);
+   el.textContent=Math.round(to*e).toLocaleString('he-IL');if(p<1)requestAnimationFrame(step);else el.textContent=txt};
+  el.textContent='0';requestAnimationFrame(step)})},{threshold:.4});
+ els.forEach(function(e){io.observe(e)});
 })();
 heroRun();
 })();
