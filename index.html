@@ -160,6 +160,9 @@ a.buy:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
 .ntabs button[aria-selected="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
 .news .nd{color:var(--muted);font-size:.74rem;margin-inline-start:6px}
 .news li[hidden]{display:none}
+.newsmore{display:none;width:100%;margin:8px 0 4px;padding:10px;font:inherit;font-weight:700;font-size:.92rem;border-radius:10px;border:1px solid var(--line);background:var(--surface2);color:var(--ink);cursor:pointer}
+@media(max-width:980px){.news:not(.expanded) li.xtra{display:none}.news .newsmore:not([hidden]){display:block}}
+@media(max-width:760px){.hero-info #hero-news .hn:nth-child(n+2){display:none}}
 .sec-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
 .sec-head p{margin:2px 0 0;color:var(--muted);font-size:.88rem}
 button{font:inherit;cursor:pointer;border-radius:6px;border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:6px 12px}
@@ -12743,6 +12746,7 @@ function newsHtml(){
  return '<aside class="news" aria-label="חדשות הרכב"><h3>חדשות הרכב</h3><p class="asof">מעודכן ל־'+NEWSASOF+'</p>'+
  '<div class="ntabs" role="tablist">'+NEWSTAB.map(function(t,i){return '<button type="button" role="tab" data-ntab="'+t[0]+'" aria-selected="'+(i===0)+'">'+t[1]+'</button>'}).join('')+'</div>'+
  '<ul>'+NEWS.map(function(n){return '<li data-nt="'+n[0]+'"><span class="tag '+n[0]+'">'+TL[n[0]]+'</span><span class="nd">'+n[1]+'</span><b>'+n[2]+'</b><a href="'+n[3]+'" target="_blank" rel="noopener">'+n[4]+' ↗</a></li>'}).join('')+'</ul>'+
+ '<button type="button" class="newsmore" data-newsmore hidden></button>'+
  '<p class="src">מקור: כתבות באתרים המצוינים. הקישורים נפתחים בלשונית חדשה.</p></aside>';
 }
 var VIDEOS=[
@@ -12768,6 +12772,14 @@ function pairsHtml(){
 }
 var FACTS=['רכב מאבד בדרך כלל את רוב ערכו בשנים הראשונות. לכן אובדן ערך הוא לרוב הרכיב הגדול בעלות הבעלות.','בעיר, היברידי חוסך בדרך כלל יותר דלק מאשר בכביש מהיר, כי הוא טוען את המצבר בבלימה.','הקילומטראז׳ השנתי משנה את התמונה: ככל שנוסעים יותר, חשוב יותר חיסכון באנרגיה.','עמדת טעינה ביתית מוזילה משמעותית את העלות לק״מ של רכב חשמלי לעומת טעינה ציבורית.','לפני קניית משומש בקשו תיק טיפולים והזמינו בדיקה במכון בלתי תלוי.','ציון ההתאמה משתנה לפי המשקלים שאתם בוחרים. אפשר לשחק עם הסליידרים ולראות מי מנצח.'];
 function factsHtml(){return '<div class="fact" id="fact" aria-live="off"><span class="fl">הידעתם?</span><span id="fact-t">'+FACTS[0]+'</span></div>'}
+function capNews(){
+ var a=document.querySelector('aside.news');if(!a)return;
+ var vis=[].filter.call(a.querySelectorAll('li'),function(li){return !li.hidden});
+ vis.forEach(function(li,i){li.classList.toggle('xtra',i>=4)});
+ var extra=Math.max(0,vis.length-4),b=a.querySelector('[data-newsmore]');if(!b)return;
+ var open=a.classList.contains('expanded');
+ b.hidden=extra===0;b.textContent=open?'הצג פחות חדשות':'הצג עוד חדשות ('+extra+')';
+}
 function heroNewsHtml(){return NEWS.slice(0,3).map(function(n){return '<a class="hn" href="'+n[3]+'" target="_blank" rel="noopener"><span class="hd">'+n[1]+'</span><b>'+esc(n[2])+'</b><small>'+esc(n[4])+' ↗</small></a>'}).join('')}
 function heroInfoHtml(){
  return '<h3>חדשות אחרונות</h3><div id="hero-news">'+heroNewsHtml()+'</div>'+
@@ -12825,7 +12837,7 @@ document.addEventListener('click',function(e){
 });
 function goHome(fromPop){
  var w=document.getElementById('wrap');if(w.classList.contains('is-home'))return;
- w.classList.add('is-home');renderHome();syncAppPromo();window.scrollTo(0,0);
+ w.classList.add('is-home');renderHome();capNews();syncAppPromo();window.scrollTo(0,0);
  if(!fromPop){try{if(history.state&&history.state.carnx)history.back()}catch(e){}}
 }
 function leaveHome(n,cat){
@@ -12836,14 +12848,15 @@ function leaveHome(n,cat){
 }
 document.addEventListener('click',function(e){
  var t=e.target.closest&&e.target.closest('#home button');if(!t)return;
- if(t.getAttribute('data-ntab')){var tb=t.getAttribute('data-ntab');document.querySelectorAll('.ntabs button').forEach(function(x){x.setAttribute('aria-selected',x===t)});document.querySelectorAll('.news li').forEach(function(li){li.hidden=!(tb==='all'||li.getAttribute('data-nt')===tb)});return}
+ if(t.getAttribute('data-ntab')){var tb=t.getAttribute('data-ntab');document.querySelectorAll('.ntabs button').forEach(function(x){x.setAttribute('aria-selected',x===t)});document.querySelectorAll('.news li').forEach(function(li){li.hidden=!(tb==='all'||li.getAttribute('data-nt')===tb)});capNews();return}
+ if(t.hasAttribute&&t.hasAttribute('data-newsmore')){var na=t.closest('aside.news');na.classList.toggle('expanded');capNews();return}
  if(t.getAttribute('data-pair')){var pr=PAIRS[+t.getAttribute('data-pair')],ia=findCur(pr[0][0],pr[0][1]),ib=findCur(pr[1][0],pr[1][1]);S.sample=false;S.cars=[mk(ROWS[ia],ia),mk(ROWS[ib],ib)];S.open={};renderCars();renderCatalog();refresh();renderPicker();leaveHome(4);return}
  if(t.id==='h-start'||t.id==='h-start2')leaveHome(1);
  else if(t.id==='h-demo')leaveHome(4);
  else if(t.getAttribute('data-hot')){var hi=+t.getAttribute('data-hot');addCar(mk(ROWS[hi],hi));leaveHome(3)}
  else if(t.getAttribute('data-hcat'))leaveHome(3,t.getAttribute('data-hcat'));
 });
-renderHome();document.getElementById('wrap').classList.add('is-home');syncAppPromo();
+renderHome();capNews();document.getElementById('wrap').classList.add('is-home');syncAppPromo();
 (function(){
  var gb=document.getElementById('gohome'),fab=document.getElementById('homefab'),h1=document.querySelector('header.top h1');
  if(gb)gb.addEventListener('click',function(){goHome()});
@@ -12870,7 +12883,7 @@ setInterval(function(){var e=document.getElementById('fact-t');if(!e||!document.
   var ok=d.items.filter(function(n){return Array.isArray(n)&&n.length>=5&&/^https:\/\//.test(n[3])&&{il:1,ev:1,w:1}[n[0]]});
   if(!ok.length)return;
   NEWS=ok.slice(0,14);if(d.asof)NEWSASOF=String(d.asof).slice(0,12);
-  var a=document.querySelector('aside.news');if(a){var t=document.createElement('div');t.innerHTML=newsHtml();a.replaceWith(t.firstChild)}
+  var a=document.querySelector('aside.news');if(a){var t=document.createElement('div');t.innerHTML=newsHtml();a.replaceWith(t.firstChild);capNews()}
   var hn=document.getElementById('hero-news');if(hn)hn.innerHTML=heroNewsHtml();
  }
  try{
