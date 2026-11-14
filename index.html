@@ -333,6 +333,32 @@ header.top .hbtns{display:flex;gap:8px;flex-wrap:wrap}
 .apppromo .ap-b a,.apppromo .ap-b button{display:inline-flex;align-items:center;gap:8px;padding:11px 18px;border-radius:10px;background:#fff;color:#0b4f43;font-weight:700;border:0;text-decoration:none;font-size:.98rem;cursor:pointer}
 .apppromo .ap-b a[hidden],.apppromo .ap-b button[hidden]{display:none!important}
 .apppromo .ap-hint{flex-basis:100%;font-size:.88rem;background:rgba(255,255,255,.14);border-radius:10px;padding:10px 14px;margin:0}
+.hb-fab{position:fixed;left:max(14px,env(safe-area-inset-left,0px));bottom:max(14px,env(safe-area-inset-bottom,0px));z-index:60;display:inline-flex;align-items:center;gap:8px;padding:11px 18px;border-radius:99px;background:#fff;color:#0b4f43;border:1.5px solid #0e6b5b;font-weight:700;box-shadow:0 6px 18px rgba(0,0,0,.25);cursor:pointer}
+.hb-fab svg{width:18px;height:18px}
+.hb-panel{position:fixed;left:max(14px,env(safe-area-inset-left,0px));bottom:max(70px,calc(env(safe-area-inset-bottom,0px) + 62px));z-index:61;width:min(380px,calc(100vw - 28px));max-height:min(560px,calc(100vh - 100px));display:none;flex-direction:column;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:16px;box-shadow:0 14px 40px rgba(0,0,0,.35);overflow:hidden}
+.hb-panel.open{display:flex}
+.hb-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:12px 14px;background:linear-gradient(135deg,#0b4f43,#1f8a72);color:#fff}
+.hb-head b{font-family:'Secular One','Assistant',sans-serif;font-size:1.05rem}
+.hb-head small{display:block;opacity:.85;font-size:.76rem;margin-top:1px}
+.hb-x{background:transparent;border:0;color:#fff;font-size:1.4rem;line-height:1;cursor:pointer;padding:2px 8px}
+.hb-body{flex:1 1 auto;overflow:auto;padding:12px 14px;display:flex;flex-direction:column;gap:9px;min-height:120px}
+.hb-m{max-width:92%;padding:9px 12px;border-radius:12px;line-height:1.5;font-size:.93rem;white-space:pre-wrap}
+.hb-m.bot{background:var(--surface2);align-self:flex-start;border-end-start-radius:4px}
+.hb-m.me{background:#0e6b5b;color:#fff;align-self:flex-end;border-end-end-radius:4px}
+.hb-chips{display:flex;flex-wrap:wrap;gap:6px;padding:0 14px 8px}
+.hb-chips button{font-size:.82rem;padding:5px 10px;border-radius:99px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
+.hb-chips button:hover{border-color:#0e6b5b}
+.hb-row{display:flex;gap:8px;padding:10px 14px 12px;border-top:1px solid var(--line)}
+.hb-row input{flex:1;min-width:0;padding:9px 11px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:inherit}
+.hb-row button,.hb-send{padding:9px 14px;border-radius:10px;border:0;background:#0e6b5b;color:#fff;font-weight:700;cursor:pointer}
+.hb-form{display:flex;flex-direction:column;gap:8px;padding:12px 14px;border-top:1px solid var(--line);background:var(--surface)}
+.hb-form select,.hb-form textarea,.hb-form input{width:100%;box-sizing:border-box;padding:9px 11px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:inherit}
+.hb-form textarea{min-height:84px;resize:vertical}
+.hb-form small{color:var(--muted);font-size:.78rem;line-height:1.4}
+.hb-form .hb-act{display:flex;gap:8px}
+.hb-form .hb-act button{flex:1;padding:9px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer;font-weight:600}
+.hb-form .hb-act .hb-send{background:#0e6b5b;color:#fff;border-color:#0e6b5b}
+@media(max-width:760px){.hb-fab span{display:none}.hb-fab{padding:12px}}
 .hero-brand{display:flex;align-items:center;gap:12px;margin:0 0 16px;direction:ltr;justify-content:flex-end}
 .hero-brand .hl-ico{width:60px;height:60px;flex:none;filter:drop-shadow(0 4px 10px rgba(0,0,0,.3))}
 .hero-brand b{font-family:'Secular One','Assistant',sans-serif;font-size:2.1rem;letter-spacing:.02em;line-height:1;color:#fff}
@@ -459,6 +485,7 @@ header.top .hbtns{display:flex;gap:8px;flex-wrap:wrap}
 @media(max-width:760px){.hero{grid-template-columns:1fr;padding:22px;gap:20px}.hero-img{order:-1}.tiles{grid-template-columns:repeat(2,1fr)}}
 </style>
 
+<form name="feedback" method="POST" data-netlify="true" netlify-honeypot="bot-field" hidden aria-hidden="true"><input type="hidden" name="form-name" value="feedback"><input name="bot-field"><input name="type"><textarea name="message"></textarea><input name="contact"><input name="screen"></form>
 <div class="wrap" dir="rtl" id="wrap">
   <section class="home" id="home" aria-label="דף הבית"></section>
   <header class="top">
@@ -12591,7 +12618,7 @@ function showStep(n){
  doShowStep(n);
 }
 function doShowStep(n){
- S.step=Math.max(1,Math.min(5,n));
+ S.step=Math.max(1,Math.min(5,n));window.__carnxStep=S.step;
  document.querySelectorAll('.step').forEach(function(el){el.hidden=(+el.getAttribute('data-step')!==S.step)});
  renderSteps();updateNav();
  var h=$('#steps');if(h&&h.scrollIntoView)h.scrollIntoView({block:'start'});
@@ -12857,6 +12884,70 @@ setInterval(function(){var e=document.getElementById('fact-t');if(!e||!document.
    el.textContent=Math.round(to*e).toLocaleString('he-IL');if(p<1)requestAnimationFrame(step);else el.textContent=txt};
   el.textContent='0';requestAnimationFrame(step)})},{threshold:.4});
  els.forEach(function(e){io.observe(e)});
+})();
+/* help bot (FAQ, no AI) + feedback form (Netlify Forms) */
+(function(){
+ var FAQ=[
+  {k:['עלות','בעלות','מחושב','חישוב','חושב','כמה עולה','5 שנים'],a:'עלות הבעלות ל-5 שנים מחברת ארבעה דברים: ירידת ערך, דלק או חשמל לפי הצריכה והקילומטראז׳ שהזנתם, ביטוח ותחזוקה. ניתן לשנות כל נתון בשלב "מה חשוב לכם" ובטבלת ההשוואה. אלה הערכות להשוואה, לא הצעת מחיר.'},
+  {k:['מחיר','מחירים','יד2','יד 2','מחירון','מאיפה','מקור','נתונים'],a:'המחירים הם הערכות שלנו לפי מחירי שוק בישראל, ובדגמים ישנים לפי מחירי מבוקש ביד2 שנבדקו. אין כאן מחירון רשמי. תמיד כדאי לאמת מול היבואן והמוכר, ואפשר לתקן כל מחיר בעצמכם בכרטיס הרכב.'},
+  {k:['להוסיף','הוסיף','מוסיפים','בחירת','לבחור','דגם','יצרן','שנתון','מנוע','גימור','רכבים'],a:'בשלב 3 "בחירת רכבים" בוחרים קטגוריה, יצרן, דגם, שנה, מנוע וגימור, עד שמונה רכבים להשוואה. אפשר גם לכתוב בשלב 1 במילים שלכם מה אתם מחפשים, או לכתוב שם דגם ישירות, ונוסיף אותו.'},
+  {k:['ציון','התאמה','דירוג','המלצה','ממליץ','מומלץ'],a:'ציון ההתאמה נבנה לפי מה שחשוב לכם בשאלון (עלות, ביצועים, מרחב, בטיחות). אותו רכב יקבל ציון שונה לאנשים שונים. ההמלצה היא הרכב עם הציון הגבוה ביותר, ואפשר לשנות את המשקלים ולראות איך היא משתנה.'},
+  {k:['ישן','ישנים','משומש','יד שנייה','1990','שנים','ותיק'],a:'האתר מכיל דגמים מ-1990 ועד היום, כולל דורות ישנים של דגמים נפוצים בישראל. מחירי יד שנייה הם הערכה לפי גיל ודור הרכב. ככל שהרכב ישן או נדיר, ההערכה פחות מדויקת, ולכן כדאי לתקן את המחיר לפי מה שראיתם בפועל.'},
+  {k:['חשמלי','חשמל','טעינה','עמדה','היברידי','פלאג','דלק'],a:'בשלב הראשון ("הנהיגה שלכם") בוחרים סוג דלק, האם יש עמדת טעינה בבית או בעבודה, ומחיר הדלק והחשמל. בלי עמדה ביתית עלות הטעינה לרכב חשמלי עולה, והחישוב מתחשב בזה.'},
+  {k:['אפליקציה','להתקין','התקנה','מסך הבית','להוריד','הורדה'],a:'אפשר להתקין את האתר כאפליקציה: בדף הבית לחצו על "התקנה למסך הבית", ובאייפון בספארי לחצו שיתוף ← "הוספה למסך הבית". בקרוב גם בחנויות.'},
+  {k:['פרטיות','מידע אישי','הרשמה','סיסמה','נשמר','שומרים'],a:'אין הרשמה ואין חשבון. הבחירות שלכם נשמרות במכשיר בלבד. אם שולחים לנו משוב דרך החלון הזה, אנחנו מקבלים רק את מה שכתבתם (ואת האימייל, אם הוספתם). מדיניות מלאה: privacy.html'},
+  {k:['איפוס','לאפס','להתחיל','מחדש','בית','חזרה','דף הבית'],a:'כפתור "דף הבית" בראש כל מסך מחזיר לעמוד הראשי. כפתור "אפס לרכבי דוגמה" מחזיר את ההשוואה להתחלה.'},
+  {k:['תקלה','לא עובד','באג','שגיאה','נתקע','לא נטען'],a:'מצטערים על זה. אפשר לרענן את הדף (Ctrl+F5 במחשב). אם זה לא עוזר, ספרו לנו מה קרה דרך "שליחת משוב" ונתקן.'}
+ ];
+ var QUICK=['איך מחשבים עלות בעלות?','מאיפה המחירים?','איך מוסיפים דגם?','לא מצאתי דגם'];
+ var ICON='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/><path d="M9 11h6M9 14h4"/></svg>';
+ var fab=document.createElement('button');fab.type='button';fab.className='hb-fab';fab.setAttribute('aria-label','עזרה ומשוב');fab.innerHTML=ICON+'<span>עזרה ומשוב</span>';
+ var p=document.createElement('div');p.className='hb-panel';p.setAttribute('role','dialog');p.setAttribute('aria-label','עזרה ומשוב');
+ p.innerHTML='<div class="hb-head"><div><b>עזרה ומשוב</b><small>עוזר אוטומטי פשוט (לא בינה מלאכותית)</small></div><button type="button" class="hb-x" aria-label="סגירה">×</button></div><div class="hb-body" aria-live="polite"></div><div class="hb-chips"></div><div class="hb-row"><input type="text" placeholder="שאלו אותנו…" aria-label="שאלה"><button type="button" class="hb-send">שליחה</button></div>';
+ document.body.appendChild(fab);document.body.appendChild(p);
+ var body=p.querySelector('.hb-body'),chips=p.querySelector('.hb-chips'),inp=p.querySelector('input'),row=p.querySelector('.hb-row');
+ function say(t,w){var m=document.createElement('div');m.className='hb-m '+w;m.textContent=t;body.appendChild(m);body.scrollTop=body.scrollHeight;return m}
+ function norm(s){return String(s).toLowerCase().replace(/[^֐-׿a-z0-9 ]/g,' ')}
+ function answer(q){
+  var n=norm(q),best=null,bs=0;
+  FAQ.forEach(function(f){var sc=0;f.k.forEach(function(k){if(n.indexOf(norm(k).trim())>-1)sc+=k.length>3?2:1});if(sc>bs){bs=sc;best=f}});
+  if(/לא מצא|לא מוצא|חסר|אין דגם|אין את|לא קיים|לא נמצא|תוסיפו|הוסיפו/.test(n)){openForm('missing',q);return 'נשמח להוסיף. מלאו את הפרטים למטה ושלחו.'}
+  return best?best.a:null;
+ }
+ var formEl=null;
+ function closeForm(){if(formEl){formEl.remove();formEl=null}row.style.display='';chips.style.display=''}
+ function openForm(type,text){
+  closeForm();row.style.display='none';chips.style.display='none';
+  var f=document.createElement('form');f.className='hb-form';formEl=f;
+  f.innerHTML='<select name="type" aria-label="סוג"><option value="missing">חסר דגם או נתון</option><option value="bug">משהו לא עובד</option><option value="idea">הצעה לשיפור</option><option value="question">שאלה</option></select>'+
+   '<textarea name="message" required maxlength="1500" placeholder="ספרו לנו: איזה דגם או שנה חסרים, מה לא עבד, או מה הייתם משפרים"></textarea>'+
+   '<input name="contact" type="email" maxlength="120" placeholder="אימייל לתשובה (לא חובה)" autocomplete="email"><small>אנחנו שומרים רק את מה שכתבתם כאן (ואת האימייל, אם הוספתם) כדי לשפר את האתר. אל תכתבו פרטים אישיים רגישים.</small>'+
+   '<div class="hb-act"><button type="button" class="hb-cancel">ביטול</button><button type="submit" class="hb-send">שליחה</button></div>';
+  f.type.value=type||'missing';if(text)f.message.value=text;
+  p.appendChild(f);f.message.focus();
+  f.querySelector('.hb-cancel').onclick=closeForm;
+  f.onsubmit=function(e){e.preventDefault();var msg=f.message.value.trim();if(!msg)return;
+   var btn=f.querySelector('.hb-send');btn.disabled=true;btn.textContent='שולח…';
+   var scr=(document.getElementById('wrap')&&document.getElementById('wrap').classList.contains('is-home'))?'home':('step'+((window.__carnxStep)||''));
+   var data=new URLSearchParams({'form-name':'feedback','type':f.type.value,'message':msg,'contact':f.contact.value.trim(),'screen':scr,'bot-field':''});
+   fetch('/',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:data.toString()}).then(function(r){
+    if(!r.ok)throw new Error('x');closeForm();say('תודה! קיבלנו. אנחנו קוראים כל הודעה ומשפרים לפיה.','bot')
+   }).catch(function(){btn.disabled=false;btn.textContent='שליחה';say('לא הצלחנו לשלוח כרגע. אפשר לנסות שוב, או לכתוב לנו ל-carnx5739@gmail.com','bot')});
+  };
+ }
+ function ask(q){
+  q=q.trim();if(!q)return;say(q,'me');inp.value='';
+  var a=answer(q);
+  if(a){say(a,'bot')}else{say('לא מצאתי תשובה מוכנה לזה. אפשר לשלוח לנו את השאלה, ונענה ונשפר את האתר.','bot');openForm('question',q)}
+ }
+ QUICK.concat(['שליחת משוב']).forEach(function(t){var b=document.createElement('button');b.type='button';b.textContent=t;b.onclick=function(){if(t==='שליחת משוב'){openForm('idea','')}else ask(t)};chips.appendChild(b)});
+ function open(){p.classList.add('open');fab.setAttribute('aria-expanded','true');if(!body.children.length)say('שלום! אני עוזר אוטומטי פשוט. אפשר לשאול על האתר, או לשלוח לנו משוב: דגם שחסר, משהו שלא עובד או רעיון לשיפור.','bot');setTimeout(function(){inp.focus()},50)}
+ function close(){p.classList.remove('open');fab.setAttribute('aria-expanded','false');closeForm()}
+ fab.onclick=function(){p.classList.contains('open')?close():open()};
+ p.querySelector('.hb-x').onclick=close;
+ p.querySelector('.hb-row .hb-send').onclick=function(){ask(inp.value)};
+ inp.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();ask(inp.value)}});
+ document.addEventListener('keydown',function(e){if(e.key==='Escape'&&p.classList.contains('open'))close()});
 })();
 heroRun();
 })();
