@@ -315,6 +315,14 @@ details.info p{margin:6px 0 0}
 .hero-info .hinfo{margin:0;padding:0;list-style:none;display:grid;gap:7px;font-size:.92rem;line-height:1.45;color:#fff}
 .hero-info .hinfo li{padding-inline-start:16px;position:relative}
 .hero-info .hinfo li:before{content:"";position:absolute;inset-inline-start:0;top:.55em;width:7px;height:7px;border-radius:50%;background:#f2c14e}
+.homebtn{display:inline-flex;align-items:center;gap:7px;font-weight:700}
+.homebtn svg{width:16px;height:16px;flex:none}
+header.top h1{cursor:pointer}
+header.top .hbtns{display:flex;gap:8px;flex-wrap:wrap}
+.homefab{position:fixed;inset-inline-start:max(14px,env(safe-area-inset-left,0px));bottom:max(14px,env(safe-area-inset-bottom,0px));z-index:50;display:none;align-items:center;gap:7px;padding:10px 16px;border-radius:99px;background:var(--accent);color:var(--accent-ink);border:0;font-weight:700;box-shadow:0 6px 18px rgba(0,0,0,.28);cursor:pointer}
+.homefab svg{width:16px;height:16px}
+.homefab.show{display:inline-flex}
+.is-home .homefab{display:none!important}
 .hero-brand{display:flex;align-items:center;gap:12px;margin:0 0 16px;direction:ltr;justify-content:flex-end}
 .hero-brand .hl-ico{width:60px;height:60px;flex:none;filter:drop-shadow(0 4px 10px rgba(0,0,0,.3))}
 .hero-brand b{font-family:'Secular One','Assistant',sans-serif;font-size:2.1rem;letter-spacing:.02em;line-height:1;color:#fff}
@@ -448,8 +456,9 @@ details.info p{margin:6px 0 0}
       <h1>carnx</h1>
       <p class="lede">מזינים את הדגמים שמתלבטים ביניהם ואת סגנון הנסיעה, ומקבלים עלות בעלות אמיתית, ביצועים, מרחב ובטיחות במקום אחד, עם ציון מותאם למה שחשוב לכם.</p>
     </div>
-    <button id="reset" type="button">אפס לרכבי דוגמה</button>
+    <div class="hbtns"><button id="gohome" class="homebtn" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v10h13V10"/><path d="M10 20v-5h4v5"/></svg>דף הבית</button><button id="reset" type="button">אפס לרכבי דוגמה</button></div>
   </header>
+  <button id="homefab" class="homefab" type="button" aria-label="חזרה לדף הבית"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v10h13V10"/><path d="M10 20v-5h4v5"/></svg>דף הבית</button>
   <div class="stripe" aria-hidden="true"><i style="background:var(--cat-small)"></i><i style="background:var(--cat-family)"></i><i style="background:var(--cat-exec)"></i><i style="background:var(--cat-sport)"></i><i style="background:var(--cat-crossover)"></i><i style="background:var(--cat-suv)"></i><i style="background:var(--cat-mpv)"></i><i style="background:var(--cat-pickup)"></i><i style="background:var(--cat-van)"></i></div>
   <p class="notice">נתוני הדגמים במאגר הם הערכות להמחשה ולא מחירון רשמי. אחרי שמוסיפים דגם אפשר לתקן כל נתון לפי היבואן, ולעדכן מחיר דלק וחשמל בשלב הראשון.</p>
 
@@ -12736,7 +12745,13 @@ function renderHome(){
  '<div class="homefoot"><button id="h-start2" type="button">בואו נתחיל</button></div>'+
  '<p class="homenote">המחירים והנתונים הם הערכות להמחשה ולא מחירון רשמי, וניתן לתקן כל נתון לפי היבואן.</p></div>'+newsHtml()+'</div>';
 }
+function goHome(fromPop){
+ var w=document.getElementById('wrap');if(w.classList.contains('is-home'))return;
+ w.classList.add('is-home');renderHome();window.scrollTo(0,0);
+ if(!fromPop){try{if(history.state&&history.state.carnx)history.back()}catch(e){}}
+}
 function leaveHome(n,cat){
+ try{if(!(history.state&&history.state.carnx))history.pushState({carnx:1},'')}catch(e){}
  document.getElementById('wrap').classList.remove('is-home');
  if(cat){S.pk.cat=cat;S.pk.brand='any';S.pk.model='';renderPicker()}
  showStep(n);window.scrollTo(0,0);
@@ -12751,6 +12766,14 @@ document.addEventListener('click',function(e){
  else if(t.getAttribute('data-hcat'))leaveHome(3,t.getAttribute('data-hcat'));
 });
 renderHome();document.getElementById('wrap').classList.add('is-home');
+(function(){
+ var gb=document.getElementById('gohome'),fab=document.getElementById('homefab'),h1=document.querySelector('header.top h1');
+ if(gb)gb.addEventListener('click',function(){goHome()});
+ if(fab)fab.addEventListener('click',function(){goHome()});
+ if(h1){h1.setAttribute('role','link');h1.setAttribute('tabindex','0');h1.addEventListener('click',function(){goHome()});h1.addEventListener('keydown',function(e){if(e.key==='Enter')goHome()})}
+ window.addEventListener('popstate',function(){goHome(true)});
+ var tick=false;window.addEventListener('scroll',function(){if(tick)return;tick=true;requestAnimationFrame(function(){tick=false;if(fab)fab.classList.toggle('show',window.scrollY>500)})},{passive:true});
+})();
 var heroT;function heroRun(){clearInterval(heroT);var h=document.querySelector('.hero-img');if(!h)return;var im=h.querySelectorAll('.sl'),dt=h.querySelectorAll('.dots i'),n=im.length,i=0;if(n<2||(window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').matches))return;
  var adv=function(){im[i].classList.remove('on');dt[i].classList.remove('on');i=(i+1)%n;im[i].classList.add('on');dt[i].classList.add('on')};h.style.cursor='pointer';h.onclick=function(){adv();clearInterval(heroT);heroT=setInterval(tick,3200)};var tick=function(){if(!document.getElementById('wrap').classList.contains('is-home')){clearInterval(heroT);return}adv()};
  heroT=setInterval(tick,3200)}
